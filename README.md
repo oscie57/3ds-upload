@@ -2,6 +2,14 @@
 
 Webserver to upload images from your 3DS/Wii U console.
 
+### Wii U
+
+On the Wii U, you can upload screenshots from your games.
+
+### 3DS
+
+On the 3DS (Old and New), you can upload screenshots from your games, and images from your SD card.
+
 ## Gallery
 
 ![image](https://user-images.githubusercontent.com/66192059/190689072-e58537bb-c6f8-49db-9aa1-4a7b2efa5d01.png)
