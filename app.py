@@ -10,6 +10,7 @@ loc = config.loc
 locname = config.locname
 debug = config.debug
 secret = config.secret_key
+local = config.local
 
 
 def foldercheck():
@@ -100,12 +101,32 @@ def upload():
     
     return render_template('upload.html', uploadname="image.jpg", url=url)
 
+if local == True:
+    @app.route('/list')
+    def list():
+        if debug == True:
+            request_dump(request)
+
+        n3dsimages = []
+        wiiuimages = []
+        o3dsimages = []
+
+        for image in os.listdir('./uploads/'):
+            if "n3ds_" in image:
+                n3dsimages.append(image)
+            if "wiiu_" in image:
+                wiiuimages.append(image)
+            if "o3ds_" in image:
+                o3dsimages.append(image)
+        
+        return render_template("list.html", n3dsimages=n3dsimages, wiiuimages=wiiuimages, o3dsimages=o3dsimages, local=local)
+
 
 @app.route('/css/<sheet>.css')
 def css(sheet):
-    request_dump(request)
     
     return send_file(f"./static/{sheet}.css")
+
 
 @app.route('/uploads/<image>')
 def view(image):
