@@ -19,6 +19,11 @@ climit = config.consolelimit
 port = config.port
 
 
+global latestimg
+
+latestimg = ""
+
+
 def foldercheck():
 
     if locname not in os.listdir('./'):
@@ -66,6 +71,8 @@ def consolecheck(useragent):
 
 @app.route('/')
 def main():
+    global latestimg
+
     if debug == True:
         request_dump(request)
 
@@ -87,11 +94,13 @@ def main():
         case _:
             console = "_"
 
-    return render_template('index.html', console=console)
+    return render_template('index.html', console=console, latestimg=latestimg)
 
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
+    global latestimg
+
     if debug == True:
         request_dump(request)
     useragent = request.headers.get('User-Agent')
@@ -106,6 +115,9 @@ def upload():
 
         filename = genfilename(console, file.filename, 8)
         file.save(os.path.join(loc, filename))
+
+        latestimg = filename
+
         return render_template('complete.html', uploadname=filename, url=url)
 
     return render_template('upload.html', uploadname="image.jpg", url=url)
