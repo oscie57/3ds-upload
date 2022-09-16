@@ -1,6 +1,9 @@
 from flask import Flask, flash, redirect, send_file, render_template, request
 from debug import request_dump
-import os, string, random, config
+import os
+import string
+import random
+import config
 
 app = Flask(__name__)
 
@@ -17,7 +20,7 @@ port = config.port
 
 
 def foldercheck():
-    
+
     if locname not in os.listdir('./'):
         os.mkdir(loc)
 
@@ -84,7 +87,6 @@ def main():
         case _:
             console = "_"
 
-
     return render_template('index.html', console=console)
 
 
@@ -105,10 +107,10 @@ def upload():
         filename = genfilename(console, file.filename, 8)
         file.save(os.path.join(loc, filename))
         return render_template('complete.html', uploadname=filename, url=url)
-    
+
     return render_template('upload.html', uploadname="image.jpg", url=url)
 
-    
+
 @app.route('/list')
 def list():
     if debug == True:
@@ -130,12 +132,12 @@ def list():
     consoleraw = consolecheck(useragent)
 
     if consoleraw != "unk" and climit is not None:
-            while len(n3dsimages) > climit:
-                n3dsimages.pop()
-            while len(wiiuimages) > climit:
-                n3dsimages.pop()
-            while len(o3dsimages) > climit:
-                n3dsimages.pop()
+        while len(n3dsimages) > climit:
+            n3dsimages.pop()
+        while len(wiiuimages) > climit:
+            n3dsimages.pop()
+        while len(o3dsimages) > climit:
+            n3dsimages.pop()
 
     if consoleraw == "unk" and limit is not None:
         while len(n3dsimages) > limit:
@@ -144,14 +146,13 @@ def list():
             n3dsimages.pop()
         while len(o3dsimages) > limit:
             n3dsimages.pop()
-    
-        
+
     return render_template("list.html", n3dsimages=n3dsimages, wiiuimages=wiiuimages, o3dsimages=o3dsimages, limit=limit if consoleraw == "unk" else climit)
 
 
 @app.route('/css/<sheet>.css')
 def css(sheet):
-    
+
     return send_file(f"./static/{sheet}.css")
 
 
