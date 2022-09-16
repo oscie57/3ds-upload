@@ -4,7 +4,7 @@ loc = "./uploads/"
 locname = "uploads"
 
 # Flask Run Settings
-debug = True
+debug = False
 url = "192.168.0.34"
 port = 80
 
