@@ -101,25 +101,33 @@ def upload():
     
     return render_template('upload.html', uploadname="image.jpg", url=url)
 
-if local == True:
-    @app.route('/list')
-    def list():
-        if debug == True:
-            request_dump(request)
+    
+@app.route('/list')
+def list():
+    if debug == True:
+        request_dump(request)
 
-        n3dsimages = []
-        wiiuimages = []
-        o3dsimages = []
+    n3dsimages = []
+    wiiuimages = []
+    o3dsimages = []
 
-        for image in os.listdir('./uploads/'):
-            if "n3ds_" in image:
-                n3dsimages.append(image)
-            if "wiiu_" in image:
-                wiiuimages.append(image)
-            if "o3ds_" in image:
-                o3dsimages.append(image)
+    for image in os.listdir('./uploads/'):
+        if "n3ds_" in image:
+            n3dsimages.append(image)
+        if "wiiu_" in image:
+            wiiuimages.append(image)
+        if "o3ds_" in image:
+            o3dsimages.append(image)
+
+    while len(n3dsimages) > 3:
+        n3dsimages.pop()
+    while len(wiiuimages) > 3:
+        n3dsimages.pop()
+    while len(o3dsimages) > 3:
+        n3dsimages.pop()
+    
         
-        return render_template("list.html", n3dsimages=n3dsimages, wiiuimages=wiiuimages, o3dsimages=o3dsimages, local=local)
+    return render_template("list.html", n3dsimages=n3dsimages, wiiuimages=wiiuimages, o3dsimages=o3dsimages)
 
 
 @app.route('/css/<sheet>.css')

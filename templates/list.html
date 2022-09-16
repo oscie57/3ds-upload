@@ -31,10 +31,15 @@
                             List of all images on the server.
                         </h2>
 
+                        <a href="/"><button class="button is-primary">Go Back</button></a>
+                        <br><br>
+
                         <div class="box">
                             <h2 class="subtitle">
                                 New Nintendo 3DS
                             </h2>
+                            Max 3 images.
+                            <br><br>
 
                             {% for image in n3dsimages %}
                                 <img src="./uploads/{{ image }}" width="300">
@@ -45,6 +50,8 @@
                             <h2 class="subtitle">
                                 Nintendo Wii U
                             </h2>
+                            Max 3 images.
+                            <br><br>
 
                             {% for image in wiiuimages %}
                                 <img src="./uploads/{{ image }}" width="300">
@@ -55,6 +62,8 @@
                             <h2 class="subtitle">
                                 Old Nintendo 3DS
                             </h2>
+                            Max 3 images.
+                            <br><br>
 
                             {% for image in o3dsimages %}
                                 <img src="./uploads/{{ image }}" width="300">
