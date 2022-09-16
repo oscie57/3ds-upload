@@ -13,6 +13,7 @@ secret = config.secret_key
 local = config.local
 limit = config.imglimit
 climit = config.consolelimit
+port = config.port
 
 
 def foldercheck():
@@ -161,4 +162,4 @@ def view(image):
 if __name__ == '__main__':
     foldercheck()
     app.secret_key = secret
-    app.run(url, 80, debug=debug)
+    app.run(url, port, debug)

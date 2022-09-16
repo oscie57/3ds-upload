@@ -2,6 +2,8 @@
 
 Webserver to upload images from your 3DS/Wii U console.
 
+## Console Limitations
+
 ### Wii U
 
 On the Wii U, you can upload screenshots from your games.
@@ -33,3 +35,19 @@ Set `config.py` to your liking and run `py app.py`!
     cd ..
     py -m pip install flask colorama
     py app.py
+
+## Configuration
+
+| Name           | Default Value  | Type    | Description |
+| :------------- | :------------- | :------ | :---------- |
+| `loc`          | `./uploads/`   | String  | Location of uploaded images        |
+| `locname`      | `uploads`      | String  | Name of image location             |
+|                |                |         |                                    |
+| `debug`        | `True`         | Boolean | Enables Flask Debug                |
+| `url`          | `192.168.0.34` | String  | URL the server is hosted           |
+| `port`         | `80`           | Integer | Port to host the server on         |
+| `secret_key`   | `ChangeMe586`  | String  | **CHANGE THIS!** Secret Key        |
+| `local`        | `True`         | Boolean | Flag if the server is local        |
+|                |                |         |                                    |
+| `imglimit`     | `None`         | Integer | Limit of images to show on /list   |
+| `consolelimit` | `3`            | Integer | Limit of images to show on console |
