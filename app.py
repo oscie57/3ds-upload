@@ -88,10 +88,10 @@ def upload():
 
     if request.method == 'POST':
         file = request.files['file']
-        if file:
-            filename = genfilename(console, file.filename, 8)
-            file.save(os.path.join(loc, filename))
-            return render_template('complete.html', uploadname=filename, url=url)
+
+        filename = genfilename(console, file.filename, 8)
+        file.save(os.path.join(loc, filename))
+        return render_template('complete.html', uploadname=filename, url=url)
     
     return render_template('upload.html', uploadname="image.jpg", url=url)
 
