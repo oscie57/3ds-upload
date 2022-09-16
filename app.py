@@ -120,12 +120,13 @@ def list():
         if "o3ds_" in image:
             o3dsimages.append(image)
 
-    while len(n3dsimages) > limit:
-        n3dsimages.pop()
-    while len(wiiuimages) > limit:
-        n3dsimages.pop()
-    while len(o3dsimages) > limit:
-        n3dsimages.pop()
+    if limit is not None:
+        while len(n3dsimages) > limit:
+            n3dsimages.pop()
+        while len(wiiuimages) > limit:
+            n3dsimages.pop()
+        while len(o3dsimages) > limit:
+            n3dsimages.pop()
     
         
     return render_template("list.html", n3dsimages=n3dsimages, wiiuimages=wiiuimages, o3dsimages=o3dsimages, limit=limit)
