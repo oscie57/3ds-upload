@@ -4,6 +4,8 @@ import os
 import string
 import random
 import config
+import PIL
+from PIL import Image
 
 app = Flask(__name__)
 
@@ -106,15 +108,21 @@ def upload():
     useragent = request.headers.get('User-Agent')
     console = consolecheck(useragent)
 
-    if console == "unk":
-        flash("You need to use a 3DS or Wii U!")
-        redirect("/", 302)
-
     if request.method == 'POST':
         file = request.files['file']
 
         filename = genfilename(console, file.filename, 8)
-        file.save(os.path.join(loc, filename))
+
+        img = Image.open(file)
+        wid, hgt = img.size
+        if wid not in [400, 320, 854, 1920, 1360, 1366, 1280]:
+            return render_template('error.html', error="Image width is incorrect.")
+        if hgt not in [240, 480, 720, 1080]:
+            return render_template('error.html', error="Image height is incorrect.")
+        if console == "unk":
+            return  render_template('error.html', error="You are not uploading from a 3DS/Wii U console.")
+
+        img.save(os.path.join(loc, filename))
 
         latestimg = filename
 

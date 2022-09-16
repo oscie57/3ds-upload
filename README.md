@@ -8,6 +8,7 @@ Webserver to upload images from your 3DS/Wii U console.
 - Modal when clicked
   - Upload date
   - Console Uploaded from
+- Only allow images with 3ds screen size
 
 ## Console Limitations
 
