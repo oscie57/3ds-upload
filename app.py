@@ -53,6 +53,8 @@ def consolecheck(useragent):
         console = "wiiu"
     elif "Nintendo 3DS" in useragent:
         console = "o3ds"
+    elif "Nintendo DSi" in useragent:
+        console = "ndsi"
     else:
         console = "unk"
 
@@ -75,6 +77,8 @@ def main():
             console = "a Nintendo Wii U"
         case "o3ds":
             console = "an Old Nintendo 3DS"
+        case "ndsi":
+            console = "a Nintendo DSi"
         case "unk":
             console = "an unknown device"
         case _:
@@ -153,8 +157,6 @@ def css(sheet):
 
 @app.route('/uploads/<image>')
 def view(image):
-    if debug == True:
-        request_dump(request)
 
     return send_file(f"{loc}/{image}")
 

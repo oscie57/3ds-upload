@@ -2,6 +2,13 @@
 
 Webserver to upload images from your 3DS/Wii U console.
 
+## Ideas
+
+- Delete after X time
+- Modal when clicked
+  - Upload date
+  - Console Uploaded from
+
 ## Console Limitations
 
 ### Wii U
