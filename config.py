@@ -17,3 +17,5 @@ local = True
 
 # Limit of images to show on the list, can be None
 imglimit = None
+# Limit of images to show on a console
+consolelimit = 3

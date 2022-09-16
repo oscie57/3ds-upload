@@ -12,6 +12,7 @@ debug = config.debug
 secret = config.secret_key
 local = config.local
 limit = config.imglimit
+climit = config.consolelimit
 
 
 def foldercheck():
@@ -120,7 +121,18 @@ def list():
         if "o3ds_" in image:
             o3dsimages.append(image)
 
-    if limit is not None:
+    useragent = request.headers.get('User-Agent')
+    consoleraw = consolecheck(useragent)
+
+    if consoleraw != "unk" and climit is not None:
+            while len(n3dsimages) > climit:
+                n3dsimages.pop()
+            while len(wiiuimages) > climit:
+                n3dsimages.pop()
+            while len(o3dsimages) > climit:
+                n3dsimages.pop()
+
+    if consoleraw == "unk" and limit is not None:
         while len(n3dsimages) > limit:
             n3dsimages.pop()
         while len(wiiuimages) > limit:
@@ -129,7 +141,7 @@ def list():
             n3dsimages.pop()
     
         
-    return render_template("list.html", n3dsimages=n3dsimages, wiiuimages=wiiuimages, o3dsimages=o3dsimages, limit=limit)
+    return render_template("list.html", n3dsimages=n3dsimages, wiiuimages=wiiuimages, o3dsimages=o3dsimages, limit=limit if consoleraw == "unk" else climit)
 
 
 @app.route('/css/<sheet>.css')
