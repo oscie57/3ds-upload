@@ -7,4 +7,7 @@ loc = "./uploads/"
 locname = "uploads"
 
 # Enables Flask's debug mode
-debug = True
+debug = False
+
+# Change this!
+secret_key = "ChangeMe586"

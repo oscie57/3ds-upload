@@ -1,4 +1,4 @@
-from flask import Flask, send_file, render_template, request
+from flask import Flask, flash, redirect, send_file, render_template, request
 from debug import request_dump
 import os, string, random, config
 
@@ -9,6 +9,7 @@ url = config.url
 loc = config.loc
 locname = config.locname
 debug = config.debug
+secret = config.secret_key
 
 
 def foldercheck():
@@ -86,6 +87,10 @@ def upload():
     useragent = request.headers.get('User-Agent')
     console = consolecheck(useragent)
 
+    if console == "unk":
+        flash("You need to use a 3DS or Wii U!")
+        redirect("/", 302)
+
     if request.method == 'POST':
         file = request.files['file']
 
@@ -112,4 +117,5 @@ def view(image):
 
 if __name__ == '__main__':
     foldercheck()
+    app.secret_key = secret
     app.run(url, 80, debug=debug)
