@@ -14,3 +14,6 @@ secret_key = "ChangeMe586"
 
 # Set to "True" if this is local
 local = True
+
+# Limit of images to show on the list
+imglimit = 3
