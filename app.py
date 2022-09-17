@@ -23,7 +23,7 @@ port = config.port
 
 global latestimg
 
-latestimg = ""
+latestimg = "../static/default.jpg"
 
 
 def foldercheck():
