@@ -1,5 +1,5 @@
 import os, string, random
-from config import url, loc, locname, debug, secret_key, local, imglimit, consolelimit, port
+from config import loc, locname
 
 
 def foldercheck():
