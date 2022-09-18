@@ -1,75 +1,17 @@
-from flask import Flask, flash, redirect, send_file, render_template, request
+from flask import Flask, send_file, render_template, request
 from debug import request_dump
-import os
-import string
-import random
-import config
-import PIL
 from PIL import Image
 
+import os
+
+from helpers import foldercheck, genfilename, consolecheck
+from config import host, loc, debug, secret_key, imglimit, consolelimit, port
+
 app = Flask(__name__)
-
-
-url = config.url
-loc = config.loc
-locname = config.locname
-debug = config.debug
-secret = config.secret_key
-local = config.local
-limit = config.imglimit
-climit = config.consolelimit
-port = config.port
-
 
 global latestimg
 
 latestimg = "../static/default.jpg"
-
-
-def foldercheck():
-
-    if locname not in os.listdir('./'):
-        os.mkdir(loc)
-
-
-def genfilename(console, filename, length):
-
-    letters = string.ascii_lowercase + string.ascii_uppercase + string.digits
-    result = ''.join(random.choice(letters) for i in range(length))
-
-    split_tup = os.path.splitext(filename)
-    file_extension = split_tup[1]
-    file_extension = str(file_extension).lower()
-
-    finalname = console + "_" + result + file_extension
-
-    if finalname in os.listdir(loc):
-        letters = string.ascii_lowercase + string.ascii_uppercase + string.digits
-        result = ''.join(random.choice(letters) for i in range(length))
-
-        split_tup = os.path.splitext(filename)
-        file_extension = split_tup[1]
-
-        finalname = console + "_" + result + file_extension
-
-    return finalname
-
-
-def consolecheck(useragent):
-
-    if "New Nintendo 3DS like iPhone" in useragent:
-        console = "n3ds"
-    elif "Nintendo WiiU" in useragent:
-        console = "wiiu"
-    elif "Nintendo 3DS" in useragent:
-        console = "o3ds"
-    elif "Nintendo DSi" in useragent:
-        console = "ndsi"
-    else:
-        console = "unk"
-
-    return console
-
 
 @app.route('/')
 def main():
@@ -114,21 +56,21 @@ def upload():
         filename = genfilename(console, file.filename, 8)
 
         img = Image.open(file)
-        wid, hgt = img.size
-        if wid not in [400, 320, 854, 1920, 1360, 1366, 1280]:
-            return render_template('error.html', error="Image width is incorrect.")
-        if hgt not in [240, 480, 720, 1080]:
-            return render_template('error.html', error="Image height is incorrect.")
+
         if console == "unk":
-            return  render_template('error.html', error="You are not uploading from a 3DS/Wii U console.")
+            return render_template('error.html', error="You are not uploading from a 3DS/Wii U console.")
+        if img.size[0] not in [400, 320, 854, 1920, 1360, 1366, 1280]:
+            return render_template('error.html', error="Image width is incorrect.")
+        if img.size[1] not in [240, 480, 720, 1080]:
+            return render_template('error.html', error="Image height is incorrect.")
 
         img.save(os.path.join(loc, filename))
 
         latestimg = filename
 
-        return render_template('complete.html', uploadname=filename, url=url)
+        return render_template('complete.html', uploadname=filename, url=host)
 
-    return render_template('upload.html', uploadname="image.jpg", url=url)
+    return render_template('upload.html')
 
 
 @app.route('/list')
@@ -151,24 +93,24 @@ def list():
     useragent = request.headers.get('User-Agent')
     consoleraw = consolecheck(useragent)
 
-    if consoleraw == "unk" and limit is not None:
-        while len(n3dsimages) > limit:
+    if consoleraw == "unk" and imglimit is not None:
+        while len(n3dsimages) > imglimit:
             n3dsimages.pop()
-        while len(wiiuimages) > limit:
+        while len(wiiuimages) > imglimit:
             wiiuimages.pop()
-        while len(o3dsimages) > limit:
+        while len(o3dsimages) > imglimit:
             o3dsimages.pop()
     
-    if consoleraw != "unk" and climit is not None:
-        while len(n3dsimages) > climit:
+    if consoleraw != "unk" and consolelimit is not None:
+        while len(n3dsimages) > consolelimit:
             n3dsimages.pop(-1)
-        while len(wiiuimages) > climit:
+        while len(wiiuimages) > consolelimit:
             wiiuimages.pop()
-        while len(o3dsimages) > climit:
+        while len(o3dsimages) > consolelimit:
             o3dsimages.pop()
 
 
-    return render_template("list.html", n3dsimages=n3dsimages, wiiuimages=wiiuimages, o3dsimages=o3dsimages, limit=limit if consoleraw == "unk" else climit)
+    return render_template("list.html", n3dsimages=n3dsimages, wiiuimages=wiiuimages, o3dsimages=o3dsimages, limit=imglimit if consoleraw == "unk" else consolelimit)
 
 
 @app.route('/css/<sheet>.css')
@@ -185,5 +127,5 @@ def view(image):
 
 if __name__ == '__main__':
     foldercheck()
-    app.secret_key = secret
-    app.run(url, port, debug)
+    app.secret_key = secret_key
+    app.run(host, port, debug)
