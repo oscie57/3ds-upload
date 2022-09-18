@@ -4,9 +4,9 @@ loc = "./uploads/"
 locname = "uploads"
 
 # Flask Run Settings
-debug = False
-url = "192.168.0.34"
+host = "192.168.0.34"
 port = 80
+debug = False
 
 # Change this!
 secret_key = "ChangeMe586"
