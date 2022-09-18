@@ -1,11 +1,15 @@
 import os, string, random
 from config import loc, locname
+from config import show_n3ds, show_wiiu, show_o3ds, show_code
 
 
 def foldercheck():
 
     if locname not in os.listdir('./'):
         os.mkdir(loc)
+
+    if "qr" not in os.listdir(loc):
+        os.mkdir(loc + "qr")
 
 
 def genfilename(console, filename, length):
@@ -45,3 +49,18 @@ def consolecheck(useragent):
         console = "unk"
 
     return console
+
+def rendershow():
+    
+    showlist = []
+
+    if show_o3ds == True:
+        showlist.append("o3ds")
+    if show_wiiu == True:
+        showlist.append("wiiu")
+    if show_o3ds == True:
+        showlist.append("o3ds")
+    if show_code == True:
+        showlist.append("code")
+
+    return showlist
