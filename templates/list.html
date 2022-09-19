@@ -5,7 +5,6 @@
         <title>3DS Upload</title>
         <link rel="stylesheet" href="/css/style.css">
         <link rel="stylesheet" href="/css/bulma.css">
-        <link rel="stylesheet" href="/css/mdi.css">
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -34,6 +33,8 @@
                         <a href="/"><button class="button is-primary">Go Back</button></a>
                         <br><br>
 
+
+                        
                         <div class="box">
                             <h2 class="subtitle">
                                 New Nintendo 3DS
@@ -67,6 +68,18 @@
 
                             {% for image in o3dsimages %}
                                 <img src="./uploads/{{ image }}" width="300">
+                            {% endfor %}
+                        </div>
+
+                        <div class="box">
+                            <h2 class="subtitle">
+                                Mii QR Codes
+                            </h2>
+                            Max {{ limit }} images.
+                            <br><br>
+
+                            {% for image in codeimages %}
+                                <img src="./uploads/qr/{{ image }}" width="300">
                             {% endfor %}
                         </div>
 

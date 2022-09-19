@@ -1,10 +1,10 @@
-from flask import Flask, send_file, render_template, request
+from flask import Flask, send_file, render_template, request, redirect
 from debug import request_dump
 from PIL import Image
 
 import os
 
-from helpers import foldercheck, genfilename, consolecheck
+from helpers import foldercheck, genfilename, consolecheck, rendershow
 from config import host, loc, debug, secret_key, imglimit, consolelimit, port
 
 app = Flask(__name__)
@@ -57,6 +57,13 @@ def upload():
 
         img = Image.open(file)
 
+        if img.size == (240, 240):
+            img.save(os.path.join(loc, "qr/", filename))
+
+            latestimg = "qr/" + filename
+
+            return render_template('complete.html', uploadname="qr/" + filename, url=host)
+
         if console == "unk":
             return render_template('error.html', error="You are not uploading from a 3DS/Wii U console.")
         if img.size[0] not in [400, 320, 854, 1920, 1360, 1366, 1280]:
@@ -81,6 +88,7 @@ def list():
     n3dsimages = []
     wiiuimages = []
     o3dsimages = []
+    codeimages = []
 
     for image in os.listdir(loc):
         if "n3ds_" in image:
@@ -89,6 +97,9 @@ def list():
             wiiuimages.append(image)
         if "o3ds_" in image:
             o3dsimages.append(image)
+
+    for image in os.listdir(loc + "qr"):
+        codeimages.append(image)
 
     useragent = request.headers.get('User-Agent')
     consoleraw = consolecheck(useragent)
@@ -100,6 +111,8 @@ def list():
             wiiuimages.pop()
         while len(o3dsimages) > imglimit:
             o3dsimages.pop()
+        while len(codeimages) > imglimit:
+            codeimages.pop()
     
     if consoleraw != "unk" and consolelimit is not None:
         while len(n3dsimages) > consolelimit:
@@ -108,9 +121,23 @@ def list():
             wiiuimages.pop()
         while len(o3dsimages) > consolelimit:
             o3dsimages.pop()
+        while len(codeimages) > consolelimit:
+            codeimages.pop()
+        
+    showlist = rendershow()
+
+    return render_template("list.html", n3dsimages=n3dsimages, wiiuimages=wiiuimages, o3dsimages=o3dsimages, limit=imglimit if consoleraw == "unk" else consolelimit, codeimages=codeimages, showlist=showlist)
 
 
-    return render_template("list.html", n3dsimages=n3dsimages, wiiuimages=wiiuimages, o3dsimages=o3dsimages, limit=imglimit if consoleraw == "unk" else consolelimit)
+@app.route('/uploads/<image>.jpg')
+def view(image):
+
+    return send_file(f"{loc}/{image}.jpg")
+
+@app.route('/uploads/qr/<image>.jpg')
+def viewQR(image):
+
+    return send_file(f"{loc}/qr/{image}.jpg")
 
 
 @app.route('/css/<sheet>.css')
@@ -119,10 +146,13 @@ def css(sheet):
     return send_file(f"./static/{sheet}.css")
 
 
-@app.route('/uploads/<image>')
-def view(image):
+@app.route('/font/<font>')
+def woff(font):
 
-    return send_file(f"{loc}/{image}")
+    if "woff" in font:
+        return send_file(f"./static/{font}.woff")
+    if "woff2" in font:
+        return send_file(f"./static/{font}.woff2")
 
 
 if __name__ == '__main__':
