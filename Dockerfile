@@ -14,4 +14,4 @@ ENV FLASK_APP app.py
 
 EXPOSE 5000
 
-ENTRYPOINT ["gunicorn", "-b", ":5000", "--access-logfile", "-", "--error-logfile", "-", "upload:app"]
+ENTRYPOINT ["gunicorn", "-b", ":5000", "--access-logfile", "-", "--error-logfile", "-", "app:app"]
