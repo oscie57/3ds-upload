@@ -44,6 +44,16 @@ Set `config.py` to your liking and run `py app.py`!
     py -m pip install flask colorama
     py app.py
 
+### Docker
+
+FYI the flask config info is ignored in the Dockerfile, the container port will be 5000. Everything else applies.
+
+To build the image
+```
+docker build oscie/3ds-upload .
+```
+
+
 ## Configuration
 
 | Name           | Default Value  | Type    | Description |
